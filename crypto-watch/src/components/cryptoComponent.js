@@ -1,24 +1,28 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux'
 
+import { getCards } from '../store/actions'
 
 
 const CryptoComponent = (props) => {
+
+	useEffect(() => {
+		props.getCards()
+	},[])
+
 	return (
 		<div>
-			{props.cardData.map((cards) => {
-				return (	
-					<div>
-						<h2>Magic The Gathering</h2>
-						{props.isLoading ? <p>Data is loading...</p> : null}
-						{props.error ? <p style={{ color: 'red' }}>{props.error}</p> : null}
-						<h4>{cards.cards.name}</h4>
-						<p>{cards.cards.imageUrl}</p>
-						<p>{cards.cards.manaCost}</p>
-						<p>{cards.cards.colors}</p>
-					</div>
-				)
-			})}
+			<h2>Magic The Gathering</h2>
+			{props.isLoading ? <p>Data is loading...</p> : null}
+			{props.error ? <p style={{ color: 'red' }}>{props.error}</p> : null}		
+			{props.cardsData.map((cards) => (	
+				<div>
+					<h4>{cards.name}</h4>
+					<img src={cards.imageUrl} alt='pretty cardboard' />
+					<p>{cards.manaCost}</p>
+					<p>{cards.colors}</p>
+				</div>
+			))}	
 		</div>
 	)
 }
@@ -31,4 +35,4 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps)(CryptoComponent);
+export default connect(mapStateToProps, {getCards})(CryptoComponent);
